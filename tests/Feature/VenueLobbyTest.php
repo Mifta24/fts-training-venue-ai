@@ -499,7 +499,7 @@ class VenueLobbyTest extends TestCase
             ->assertOk()
             ->assertSee('photo-1431540015161-0bf868a2d407', false)
             ->assertSee('class="stage-character" data-pose="standing"', false)
-            ->assertSee('images/character/character avatar.jpg', false);
+            ->assertSee('images/character/character avatar.jpg?v='.filemtime(public_path('images/character/character avatar.jpg')), false);
         $this->get('/demo/team')->assertOk()->assertSee('class="stage-character" data-pose="consulting"', false);
         $this->get('/demo/reservation')->assertOk()->assertSee('class="stage-character" data-pose="consulting"', false);
 
