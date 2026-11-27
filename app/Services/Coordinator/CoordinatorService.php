@@ -466,6 +466,7 @@ class CoordinatorService
             "Current scene: {$scene}",
             'Selected room: '.($room ? "{$room->name} (slug: {$room->slug})" : 'none'),
             'Selected facility: '.($conversation->selectedFacility?->title ?? 'none'),
+            'Rooms (use these names and slugs): '.$conversation->venue->rooms()->where('is_active', true)->orderBy('sort_order')->get()->map(fn ($room) => "{$room->name} ({$room->slug})")->implode(', '),
         ];
 
         $draft = $conversation->reservation_state;

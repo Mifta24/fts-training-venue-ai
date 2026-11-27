@@ -185,6 +185,18 @@ class CoordinatorChatTest extends TestCase
         $this->assertStringContainsString('Treat "this room" as that room', $prompt);
     }
 
+    public function test_the_coordinator_knows_the_real_room_names_without_a_tool_call(): void
+    {
+        $this->venue->rooms()->create(['name' => 'Hidden Loft', 'slug' => 'hidden-loft', 'base_price' => 1, 'capacity' => 2, 'is_active' => false, 'sort_order' => 9]);
+        $this->fakeReply();
+
+        $this->postJson('/demo/coordinator/message', ['guest_token' => $this->startConversation(), 'message' => 'What training rooms do you have?'])->assertOk();
+
+        $prompt = $this->systemPromptOfLastRequest();
+        $this->assertStringContainsString('Rooms (use these names and slugs): Deluxe King (deluxe-king)', $prompt);
+        $this->assertStringNotContainsString('Hidden Loft', $prompt);
+    }
+
     public function test_the_coordinator_is_told_to_stay_within_the_venue_and_decline_everything_else(): void
     {
         $this->fakeReply();
